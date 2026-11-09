@@ -1,0 +1,340 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="robots" content="noindex,nofollow">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Weapons of Mass Creation</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Cinzel:wght@500;700;900&family=Inter:wght@300;400;600;800&display=swap" rel="stylesheet">
+<style>
+:root{--bg:#07070a;--ink:#f3eee4;--dim:#a49e92;--gold:#e0b354;--gold2:#ffdf8f;--ember:#ff6a2b;--blood:#b3261e;--card:rgba(255,255,255,.045);--line:rgba(224,179,84,.28)}
+*{box-sizing:border-box;margin:0;padding:0}
+html,body{height:100%;background:var(--bg);color:var(--ink);font-family:Inter,system-ui,sans-serif;overflow:hidden}
+#fx{position:fixed;inset:0;z-index:0}
+.vignette{position:fixed;inset:0;z-index:1;pointer-events:none;background:radial-gradient(ellipse at 50% 40%,transparent 35%,rgba(0,0,0,.75) 100%)}
+.grain{position:fixed;inset:-50%;z-index:2;pointer-events:none;opacity:.06;background-image:url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='160' height='160'%3E%3Cfilter id='n'%3E%3CfeTurbulence baseFrequency='.9' numOctaves='2'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)'/%3E%3C/svg%3E");animation:grain 1s steps(6) infinite}
+@keyframes grain{0%{transform:translate(0,0)}50%{transform:translate(-5%,3%)}100%{transform:translate(3%,-4%)}}
+.deck{position:fixed;inset:0;z-index:3}
+.slide{position:absolute;inset:0;display:flex;flex-direction:column;justify-content:center;align-items:center;padding:6vh 8vw;text-align:center;opacity:0;visibility:hidden;transform:scale(1.04);transition:opacity .7s ease,transform 1s cubic-bezier(.2,.8,.2,1),visibility 0s .7s}
+.slide.on{opacity:1;visibility:visible;transform:none;transition:opacity .7s ease,transform 1s cubic-bezier(.2,.8,.2,1)}
+.slide.left{align-items:flex-start;text-align:left}
+.kick{font:600 clamp(12px,1.1vw,18px) Inter;letter-spacing:.42em;text-transform:uppercase;color:var(--gold);margin-bottom:2.2vh}
+h1,h2{font-family:Cinzel,Georgia,serif;font-weight:900;line-height:1.04;letter-spacing:.01em}
+h1{font-size:clamp(44px,7.4vw,130px);color:var(--gold);filter:drop-shadow(0 0 30px rgba(224,179,84,.25))}
+h1 .w{background:linear-gradient(180deg,#fff6dc 0%,var(--gold) 55%,#8a5a12 100%);-webkit-background-clip:text;background-clip:text;color:transparent;padding-bottom:.08em}
+h1.blood .w{background:linear-gradient(180deg,#ffd9c7,#ff6a2b 55%,#5a0d07);-webkit-background-clip:text;background-clip:text}
+h2{font-size:clamp(34px,5vw,86px);color:var(--ink)}
+h2 em,h1 em{font-style:normal;color:var(--gold)}
+.sub{font-size:clamp(17px,1.75vw,30px);color:var(--dim);max-width:62ch;line-height:1.45;margin-top:3vh;font-weight:300}
+.sub b{color:var(--ink);font-weight:600}
+.quote{font-family:Cinzel,Georgia,serif;font-size:clamp(20px,2.3vw,40px);color:var(--gold2);margin-top:4vh;max-width:40ch;line-height:1.3}
+.foot{margin-top:4.5vh;font-size:clamp(15px,1.4vw,24px);color:var(--ink);border-top:1px solid var(--line);padding-top:2vh;max-width:60ch}
+/* reveal */
+.slide .r{opacity:0;transform:translateY(28px);filter:blur(8px)}
+.slide.on .r{animation:rise .9s cubic-bezier(.2,.8,.2,1) forwards;animation-delay:calc(var(--i,0)*.14s + .15s)}
+@keyframes rise{to{opacity:1;transform:none;filter:none}}
+.w{display:inline-block;opacity:0;transform:translateY(.5em) rotateX(60deg);transform-origin:bottom}
+.slide.on .w{animation:word .8s cubic-bezier(.2,.8,.2,1) forwards;animation-delay:calc(var(--w)*.06s + .1s)}
+@keyframes word{to{opacity:1;transform:none}}
+/* grids */
+.grid{display:grid;gap:2vw;margin-top:4.5vh;width:100%;max-width:1400px}
+.g2{grid-template-columns:1fr 1fr}.g3{grid-template-columns:repeat(3,1fr)}
+.card{background:var(--card);border:1px solid var(--line);border-radius:18px;padding:3.2vh 2vw;text-align:left;position:relative;overflow:hidden;backdrop-filter:blur(6px)}
+.card:before{content:"";position:absolute;inset:0;background:linear-gradient(115deg,transparent 30%,rgba(255,223,143,.13) 50%,transparent 70%);transform:translateX(-120%);animation:sheen 5s ease-in-out infinite;animation-delay:calc(var(--i,0)*.7s)}
+@keyframes sheen{0%,60%{transform:translateX(-120%)}100%{transform:translateX(120%)}}
+.card .n{font:900 clamp(26px,3vw,52px) Cinzel,serif;color:var(--gold)}
+.card h3{font:800 clamp(18px,1.8vw,32px) Inter;margin:.6vh 0 1vh}
+.card p{color:var(--dim);font-size:clamp(14px,1.25vw,22px);line-height:1.45}
+.card.dark{border-color:rgba(179,38,30,.45)}.card.dark .n{color:var(--ember)}
+ul.list{list-style:none;margin-top:4vh;display:grid;gap:1.4vh;text-align:left}
+ul.list li{font-size:clamp(18px,2vw,34px);padding-left:1.6em;position:relative}
+ul.list li:before{content:"";position:absolute;left:0;top:.45em;width:.6em;height:.6em;transform:rotate(45deg);background:var(--gold);box-shadow:0 0 14px var(--gold)}
+.cols{display:flex;gap:7vw;justify-content:center;text-align:left}
+.cols .kick{margin:0 0 .5vh}
+.pills{display:flex;flex-wrap:wrap;gap:1.2vw;justify-content:center;margin-top:5vh;max-width:1300px}
+.pill{border:1px solid var(--line);border-radius:999px;padding:1.4vh 2vw;font-size:clamp(16px,1.7vw,30px);background:var(--card)}
+.slide.on .pill{animation:rise .9s cubic-bezier(.2,.8,.2,1) forwards,float 6s ease-in-out infinite;animation-delay:calc(var(--i)*.12s + .2s),calc(var(--i)*.3s)}
+@keyframes float{0%,100%{translate:0 0}50%{translate:0 -8px}}
+/* hierarchy */
+.bars{width:min(1100px,90vw);margin-top:4vh;display:grid;gap:1.6vh}
+.bar{display:grid;grid-template-columns:12vw 1fr;align-items:center;gap:2vw;text-align:left}
+.bar b{font:900 clamp(20px,2.4vw,42px) Cinzel,serif;color:var(--gold)}
+.bar .t{position:relative;height:clamp(46px,7vh,80px);border-radius:12px;overflow:hidden;background:rgba(255,255,255,.04);border:1px solid var(--line)}
+.bar .f{position:absolute;inset:0;width:0;background:linear-gradient(90deg,#6b3f08,var(--gold),var(--gold2));box-shadow:0 0 40px rgba(224,179,84,.5)}
+.slide.on .bar .f{animation:fill 1.6s cubic-bezier(.2,.8,.2,1) forwards;animation-delay:calc(var(--i)*.35s + .5s)}
+@keyframes fill{to{width:var(--wd)}}
+.bar .t span{position:absolute;left:1.2vw;top:50%;transform:translateY(-50%);font-size:clamp(13px,1.2vw,21px);color:#fff;font-weight:700;z-index:2;text-shadow:0 1px 3px #000,0 0 8px #000}
+.gt{font:900 clamp(40px,6.5vw,120px) Cinzel,serif;margin-top:4vh;letter-spacing:.02em}
+.gt i{font-style:normal;color:var(--ember);display:inline-block;animation:pulse 2s ease-in-out infinite}
+@keyframes pulse{0%,100%{transform:scale(1);opacity:.8}50%{transform:scale(1.25);opacity:1;text-shadow:0 0 30px var(--ember)}}
+/* versus */
+.vs{display:grid;grid-template-columns:1fr auto 1fr;align-items:center;gap:3vw;margin-top:5vh;width:min(1300px,92vw)}
+.vs .x{font:900 clamp(30px,4vw,70px) Cinzel,serif;color:var(--ember);animation:pulse 2.2s infinite}
+/* equation */
+.eq{font:900 clamp(80px,16vw,280px) Cinzel,serif;background:linear-gradient(180deg,#fff,var(--gold) 60%,#6b3f08);-webkit-background-clip:text;background-clip:text;color:transparent;animation:breathe 4s ease-in-out infinite}
+@keyframes breathe{0%,100%{filter:drop-shadow(0 0 20px rgba(224,179,84,.3))}50%{filter:drop-shadow(0 0 70px rgba(255,223,143,.75))}}
+/* loot */
+.loot{width:clamp(110px,13vw,200px);aspect-ratio:1;margin:1vh auto 3vh;position:relative}
+.loot:before{content:"";position:absolute;inset:-60%;background:conic-gradient(from 0deg,transparent,rgba(255,140,40,.55),transparent 30%,rgba(255,223,143,.6),transparent 60%,rgba(255,106,43,.5),transparent);border-radius:50%;animation:spin 6s linear infinite;filter:blur(18px)}
+.loot:after{content:"";position:absolute;inset:18%;transform:rotate(45deg);background:linear-gradient(135deg,#fff3c4,#ffb02e 45%,#a34b00);box-shadow:0 0 60px #ffb02e,0 0 140px rgba(255,106,43,.8);animation:bob 2.4s ease-in-out infinite}
+@keyframes spin{to{transform:rotate(360deg)}}
+@keyframes bob{0%,100%{transform:rotate(45deg) translateY(0)}50%{transform:rotate(45deg) translate(-8px,-8px)}}
+/* desk */
+.desk{position:relative;width:min(560px,60vw);height:clamp(150px,24vh,240px);margin:3vh auto 0}
+.desk .top{position:absolute;bottom:0;left:0;right:0;height:16px;border-radius:6px;background:linear-gradient(#8a5a12,#3b2405)}
+.paper{position:absolute;bottom:16px;width:22%;height:70%;background:#efe6d2;border-radius:3px;box-shadow:0 6px 20px rgba(0,0,0,.6);animation:paper 7s ease-in-out infinite}
+.paper:after{content:"";position:absolute;inset:14% 12%;background:repeating-linear-gradient(#bfb39a 0 2px,transparent 2px 12px)}
+@keyframes paper{0%{opacity:0;transform:translateY(-140px) rotate(-8deg)}12%{opacity:1;transform:none}70%{opacity:1;transform:none}85%{opacity:0;transform:translate(-160px,90px) rotate(-40deg)}100%{opacity:0}}
+/* code prompt */
+.prompt{margin-top:4vh;max-width:1100px;text-align:left;background:#0d0d12;border:1px solid var(--line);border-radius:16px;padding:3vh 2.4vw;font:500 clamp(16px,1.6vw,28px)/1.5 ui-monospace,Menlo,Consolas,monospace;color:#f5e6c2;box-shadow:0 0 60px rgba(224,179,84,.12)}
+.prompt .p{color:var(--gold)}
+.caret{display:inline-block;width:.6em;height:1.1em;background:var(--gold);vertical-align:-.15em;animation:blink 1s steps(1) infinite}
+@keyframes blink{50%{opacity:0}}
+.chain{display:flex;align-items:center;gap:2vw;margin-top:5vh;flex-wrap:wrap;justify-content:center}
+.chain .arrow{font-size:clamp(26px,3vw,50px);color:var(--ember);animation:nudge 1.4s ease-in-out infinite}
+@keyframes nudge{50%{transform:translateX(10px)}}
+.big-num{font:900 clamp(140px,22vw,380px) Cinzel,serif;position:absolute;right:4vw;bottom:-6vh;color:rgba(224,179,84,.07);pointer-events:none}
+.ring{position:absolute;width:70vmin;height:70vmin;border-radius:50%;border:1px solid rgba(224,179,84,.18);animation:spin 40s linear infinite;pointer-events:none}
+.ring:before{content:"";position:absolute;top:-5px;left:50%;width:10px;height:10px;border-radius:50%;background:var(--gold);box-shadow:0 0 20px var(--gold)}
+.ring.b{width:90vmin;height:90vmin;animation-duration:70s;animation-direction:reverse;border-color:rgba(255,106,43,.12)}
+.ring.b:before{background:var(--ember);box-shadow:0 0 20px var(--ember)}
+/* chrome */
+.prog{position:fixed;left:0;top:0;height:3px;background:linear-gradient(90deg,var(--ember),var(--gold2));z-index:10;transition:width .6s cubic-bezier(.2,.8,.2,1);box-shadow:0 0 12px var(--gold)}
+.count{position:fixed;right:2vw;bottom:2vh;z-index:10;font:600 13px Inter;letter-spacing:.2em;color:var(--dim)}
+.brand{position:fixed;left:2vw;bottom:2vh;z-index:10;font:700 12px Cinzel,serif;letter-spacing:.3em;color:rgba(224,179,84,.6)}
+.hint{position:fixed;left:50%;bottom:2vh;transform:translateX(-50%);z-index:10;font:400 12px Inter;color:var(--dim);opacity:.7;transition:opacity 1s}
+@media (max-width:800px){.g3,.g2,.vs{grid-template-columns:1fr}.cols{flex-direction:column;gap:3vh}.bar{grid-template-columns:1fr}}
+</style>
+</head>
+<body>
+<canvas id="fx"></canvas><div class="vignette"></div><div class="grain"></div>
+<div class="prog" id="prog"></div><div class="brand">WEAPONS OF MASS CREATION</div><div class="count" id="count"></div>
+<div class="hint" id="hint">Arrow keys, space or click to advance. F for fullscreen.</div>
+<main class="deck" id="deck">
+
+<section class="slide"><div class="ring"></div><div class="ring b"></div>
+<div class="kick r">Grok Bot Class</div>
+<h1 class="split">Weapons of Mass Creation</h1>
+<p class="sub r" style="--i:4">Equipping Builders and Creators For The AI Era</p></section>
+
+<section class="slide"><div class="kick r">What is Value?</div>
+<h2 class="split">Value is a <em>Desired Result.</em></h2>
+<div class="vs"><div class="card r" style="--i:3"><div class="n">UFC</div><h3>McGregor</h3><p>He was exceptionally good at selling Tickets, therefore he was exceptionally valuable to the UFC.</p></div>
+<div class="x r" style="--i:4">VS</div>
+<div class="card r" style="--i:5"><div class="n">NFL</div><h3>Tom Brady</h3><p>He sold Tickets because he won Superbowls.</p></div></div>
+<p class="foot r" style="--i:7">Value is dependent upon <b style="color:var(--gold)">Arena.</b></p></section>
+
+<section class="slide"><div class="kick r">The Hierarchy of Value</div>
+<h2 class="split" style="font-size:clamp(28px,3.6vw,62px)">In the Arena of Wealth Creation, Value is Measured <em>3 Ways.</em></h2>
+<div class="bars">
+<div class="bar r" style="--i:2"><b>Speed</b><div class="t"><div class="f" style="--wd:100%;--i:0"></div><span>How quickly a Desired Result is Produced</span></div></div>
+<div class="bar r" style="--i:3"><b>Quality</b><div class="t"><div class="f" style="--wd:72%;--i:1"></div><span>How much of a Desired Result is Produced per Deployed Resource</span></div></div>
+<div class="bar r" style="--i:4"><b>Volume</b><div class="t"><div class="f" style="--wd:45%;--i:2"></div><span>How much of a Desired Result is Produced</span></div></div>
+</div>
+<div class="gt r" style="--i:7">Speed <i>&gt;</i> Quality <i>&gt;</i> Volume</div></section>
+
+<section class="slide"><div class="big-num">1</div><div class="kick r">Speed</div>
+<h1 class="split">Speed is Leverage.</h1>
+<p class="sub r" style="--i:4">The faster you can produce a Desired Result, the Faster that Result can be <b>Multiplied</b> as a result of the newly available Capital.</p></section>
+
+<section class="slide"><div class="big-num">2</div><div class="kick r">Quality</div>
+<h2 class="split">Quality is <em>Efficiency.</em></h2>
+<div class="vs"><div class="card r" style="--i:3"><div class="n">Seal Team 6</div><p>Both groups are technically soldiers.</p></div>
+<div class="x r" style="--i:4">VS</div>
+<div class="card dark r" style="--i:5"><div class="n">Conscripts</div><p>No matter how many resources you provide, they may never achieve the result of the Seal Team.</p></div></div>
+<p class="foot r" style="--i:7">Provide the same exact gear to both groups, and you will get 2 completely different outcomes.</p></section>
+
+<section class="slide"><div class="kick r">The Quality of a Result can be improved 3 ways</div>
+<h2 class="split">Ideally all are happening <em>at the same time.</em></h2>
+<div class="grid g3">
+<div class="card r" style="--i:3"><div class="n">1</div><h3>Decrease Cost</h3><p>by Reducing or Eliminating Waste.</p></div>
+<div class="card r" style="--i:4"><div class="n">2</div><h3>Increase Revenue</h3><p>by Acquiring More Clients without increasing Spend or Cost.</p></div>
+<div class="card r" style="--i:5"><div class="n">3</div><h3>Increase Revenue</h3><p>by Acquiring Higher Revenue Generating Clients without increasing spend or cost.</p></div></div>
+<p class="quote r" style="--i:7">There are far more Dollars being Wasted, than being Invested.</p></section>
+
+<section class="slide"><div class="big-num">3</div><div class="kick r">Volume</div>
+<h1 class="split">Volume is Scale.</h1>
+<p class="sub r" style="--i:4">What most people don't understand about scale is that at some point <b>Fulfillment breaks.</b> This is why it's the Least of the 3.</p>
+<p class="quote r" style="--i:6">"It's like watching Gold turn to dirt right before your very eyes."</p>
+<p class="foot r" style="--i:8">People Are Willing To Exchange Their Literal Life Force For Their Desired Result.</p></section>
+
+<section class="slide"><div class="ring"></div><div class="kick r">What I am going to teach you</div>
+<h2 class="split">How to use AI to Produce <em>Speed, Quality, and Volume</em></h2>
+<p class="sub r" style="--i:6">by providing <b>Autonomous AI Business to Business Services.</b></p></section>
+
+<section class="slide" data-mood="blood"><div class="kick r" style="color:var(--ember)">Fair Warning</div>
+<h1 class="split blood">You will become a Vampire.</h1>
+<p class="sub r" style="--i:5">At 4:30 in the morning after an All Night AI Bender, you will literally start telling yourself...</p>
+<p class="quote r" style="--i:7">"I'll sleep when I'm Rich."</p></section>
+
+<section class="slide"><div class="kick r">The Power &amp; Rewards</div>
+<h2 class="split">AI is just going to <em>amplify</em> what already exists.</h2>
+<p class="sub r" style="--i:6">Once you start working with your AI Team, it will be the first time in your entire life you feel like <b>someone wants you to win.</b> Full absolute belief in you. No judgement.</p>
+<p class="quote r" style="--i:8">Welcome to Noah's Ark, we're happy to have you.</p></section>
+
+<section class="slide"><div class="cols">
+<div><div class="kick r">You will become</div><ul class="list">
+<li class="r" style="--i:1">A Better Communicator</li><li class="r" style="--i:2">A Quicker Problem Solver</li><li class="r" style="--i:3">A More Effective Critical Thinker</li><li class="r" style="--i:4">An Enlightened Strategist</li><li class="r" style="--i:5">A Powerful Synergizer</li></ul></div>
+<div><div class="kick r" style="--i:6">You will improve</div><ul class="list">
+<li class="r" style="--i:7">Your IQ</li><li class="r" style="--i:8">Reading Speed &amp; Comprehension</li><li class="r" style="--i:9">Bottleneck Identification</li></ul></div></div>
+<p class="foot r" style="--i:11">AI is a Skill to be mastered, not just a tool to be used.</p></section>
+
+<section class="slide"><div class="loot r"></div>
+<div class="kick r" style="--i:1">Read what your Team is telling you</div>
+<h2 class="split">When does <em>Legendary Loot</em> drop?</h2>
+<div class="grid g2" style="max-width:1100px">
+<div class="card dark r" style="--i:5"><div class="n">#1</div><h3>Catch Mistakes</h3><p>Stop a High Speed Train from going off the rails and wrecking your build.</p></div>
+<div class="card r" style="--i:6"><div class="n">#2</div><h3>Catch Brilliance</h3><p>Catch the Gold that AI will produce randomly as it's working with you.</p></div></div></section>
+
+<section class="slide"><div class="kick r">Additional gifts from Mastering AI</div>
+<div class="pills">
+<span class="pill r" style="--i:1">A Mindset of Abundance</span><span class="pill r" style="--i:2">Knowledge</span><span class="pill r" style="--i:3">Understanding</span><span class="pill r" style="--i:4">Discernment</span><span class="pill r" style="--i:5">Wisdom</span><span class="pill r" style="--i:6">Clairvoyance</span></div></section>
+
+<section class="slide"><div class="ring"></div><div class="ring b"></div><div class="kick r">The Refinery</div>
+<h2 class="split">Artificial Intelligence is like a <em>Refinery.</em></h2>
+<p class="sub r" style="--i:6">It is going to help you burn away and clear out everything that is preventing <b>Direct and Powerful Inspiration from God Himself.</b></p>
+<p class="quote r" style="--i:8">Where do these moments of absolute Clarity, Invention, and Innovation come from?</p></section>
+
+<section class="slide"><div class="kick r">You will become</div>
+<div class="pills">
+<span class="pill r" style="--i:1">More Patient</span><span class="pill r" style="--i:2">More Humble</span><span class="pill r" style="--i:3">More Self-Controlled</span><span class="pill r" style="--i:4">More Peaceful</span><span class="pill r" style="--i:5">More Faithful</span><span class="pill r" style="--i:6">More Kind</span><span class="pill r" style="--i:7">More Generous</span><span class="pill r" style="--i:8">More Joyful</span><span class="pill r" style="--i:9">More Loving</span></div>
+<p class="foot r" style="--i:11">You will realize you have been called for a Greater Purpose.</p></section>
+
+<section class="slide"><div class="eq r">1 + 1 = 2</div>
+<p class="sub r" style="--i:3;max-width:70ch">If you Develop and Utilize your Inspired Personhood to deploy Artificial Intelligence to Improve the Speed, Quality, and Volume of someone's Desired Result Autonomously,</p>
+<h2 class="split" style="font-size:clamp(26px,3.4vw,58px);margin-top:3vh">you <em>WILL</em> achieve and acquire Generational Wealth and Generational Freedom.</h2></section>
+
+<section class="slide"><div class="kick r">The 3 Fundamental Limitations of AI</div>
+<div class="grid g3">
+<div class="card dark r" style="--i:1"><div class="n">#1</div><h3>AI Autism</h3></div>
+<div class="card dark r" style="--i:2"><div class="n">#2</div><h3>AI Laziness</h3></div>
+<div class="card dark r" style="--i:3"><div class="n">#3</div><h3>AI Amnesia</h3></div></div></section>
+
+<section class="slide"><div class="big-num">#1</div><div class="kick r">AI Autism</div>
+<h1 class="split">AI is simply a Mirror.</h1>
+<ul class="list" style="text-align:center"><li class="r" style="--i:4">AI doesn't get Inspired.</li><li class="r" style="--i:5">You provide its Inspiration.</li><li class="r" style="--i:6"><b style="color:var(--gold)">You are its Inspirer.</b></li></ul>
+<p class="foot r" style="--i:8">AI will simply reflect whoever is wielding it at the time.</p></section>
+
+<section class="slide"><div class="big-num">#2</div><div class="kick r">AI Laziness</div>
+<h2 class="split">AI is <em>intentionally throttled.</em></h2>
+<div class="grid g2" style="max-width:1100px">
+<div class="card r" style="--i:3"><h3>Training Data</h3><p>Once you read the whole internet, there isn't much else to train from.</p></div>
+<div class="card r" style="--i:4"><h3>Energy &amp; Compute</h3><p>Frankly, AI is expensive to run.</p></div></div>
+<p class="quote r" style="--i:6">"Good enough" to be helpful, but not enough to be satisfying.</p></section>
+
+<section class="slide"><div class="big-num">#3</div><div class="kick r">AI Amnesia</div>
+<h2 class="split">Context is a <em>Desk.</em></h2>
+<div class="desk r" style="--i:2"><div class="paper" style="left:2%;animation-delay:0s"></div><div class="paper" style="left:26%;animation-delay:1.2s"></div><div class="paper" style="left:50%;animation-delay:2.4s"></div><div class="paper" style="left:74%;animation-delay:3.6s"></div><div class="top"></div></div>
+<p class="sub r" style="--i:4">Once the desk gets filled, older papers come off to make room for the new. The first thing you told it may be <b>the heart of your whole conversation.</b></p>
+<p class="foot r" style="--i:6">Durable Memory is a Journal that becomes thousands of lines, and the model only reads a portion.</p></section>
+
+<section class="slide"><div class="ring"></div><div class="kick r">Foundations &amp; Solutions</div>
+<h2 class="split">3 Solutions to combat <em>AI Limitations</em></h2>
+<div class="grid g3">
+<div class="card r" style="--i:3"><div class="n">#1</div><h3>Intention &amp; Inspiration</h3></div>
+<div class="card r" style="--i:4"><div class="n">#2</div><h3>Breadth &amp; Depth</h3></div>
+<div class="card r" style="--i:5"><div class="n">#3</div><h3>Synergy &amp; Skills</h3></div></div></section>
+
+<section class="slide"><div class="kick r">Why a Weapon?</div>
+<h2 class="split">AI is a Weapon of Mass Creation.</h2>
+<div class="chain"><div class="pill r" style="--i:3">Creation without Direction</div><span class="arrow r" style="--i:4">&rarr;</span><div class="pill r" style="--i:5">Chaos</div><span class="arrow r" style="--i:6">&rarr;</span><div class="pill r" style="--i:7">Depravity</div></div>
+<p class="sub r" style="--i:8">When guided by your Intention, AI can generate Value. And <b>Value is the Pre-Cursor for Wealth.</b></p>
+<p class="quote r" style="--i:10">From a Weapon of Mass Creation to a Weapon of Mass <em style="font-style:normal;color:var(--ember)">Value</em> Creation.</p></section>
+
+<section class="slide"><div class="kick r">Intention Bottlenecks</div>
+<h2 class="split">Most people struggle properly expressing their <em>Intention.</em></h2>
+<div class="grid g3">
+<div class="card dark r" style="--i:4"><div class="n">#1</div><p>They struggle to properly communicate their Intention.</p></div>
+<div class="card dark r" style="--i:5"><div class="n">#2</div><p>They don't understand their Intention.</p></div>
+<div class="card dark r" style="--i:6"><div class="n">#3</div><p>They have no Intention at all.</p></div></div></section>
+
+<section class="slide"><div class="big-num">1</div><div class="kick r">Step 1</div>
+<h1 class="split">Humble Yourself.</h1>
+<p class="sub r" style="--i:4">Most people go through life living Distraction to Distraction. Pull up your screen time.</p>
+<p class="quote r" style="--i:6">"A full cup is difficult to add to."</p>
+<p class="foot r" style="--i:8">AI is an empty vessel. Sometimes you have to empty yourself to allow God to show you who He's made you to be. <b style="color:var(--gold)">Kenosis.</b></p></section>
+
+<section class="slide"><div class="big-num">2</div><div class="kick r">Step 2</div>
+<h1 class="split">Start Digging.</h1>
+<p class="quote r" style="--i:4">"Because Grant's like me... He's a Digger."</p>
+<p class="sub r" style="--i:6"><b>Asking Questions is a skill.</b> And how do you get better at a skill?</p>
+<div class="pills" style="margin-top:3vh"><span class="pill r" style="--i:8">Practice</span><span class="pill r" style="--i:9">Get a Coach</span><span class="pill r" style="--i:10">Learn</span></div></section>
+
+<section class="slide" data-mood="blood"><div class="big-num">3</div><div class="kick r" style="color:var(--ember)">Step 3</div>
+<h1 class="split">Refine.</h1>
+<p class="sub r" style="--i:4">Once the Revelation hits, you will become <b>Dracula.</b> I have ripped 48 Hour stretches straight.</p>
+<p class="quote r" style="--i:6">The gap between where you are and where you want to be will be measured in months.</p></section>
+
+<section class="slide"><div class="kick r">Breadth &amp; Depth</div>
+<h2 class="split">AI is a <em>Drill.</em></h2>
+<div class="grid g3">
+<div class="card r" style="--i:3"><div class="n">Model</div><h3>The Drill</h3><p>How Deep and Wide the Drill can go without breaking down.</p></div>
+<div class="card r" style="--i:4"><div class="n">Reasoning</div><h3>The Engine</h3><p>How Thoroughly the Hole gets drilled.</p></div>
+<div class="card r" style="--i:5"><div class="n">Context</div><h3>The Map</h3><p>How far you can map the tunnels before the map gets too unwieldy.</p></div></div>
+<p class="foot r" style="--i:7">Your AI stops short of Gold 9 times out of 10.</p></section>
+
+<section class="slide"><div class="ring"></div><div class="ring b"></div><div class="kick r">The Command Center</div>
+<h2 class="split">Best Model. Highest Reasoning. <em>Most Context.</em></h2>
+<p class="sub r" style="--i:6">The problem is, the year is 1972, your battlefield is Vietnam, and <b>your Generals want to go golfing.</b></p>
+<p class="quote r" style="--i:8">You just have to press on them.</p></section>
+
+<section class="slide"><div class="kick r">The Prompt</div>
+<h2 class="split">Go <em>Broader</em> and <em>Deeper.</em></h2>
+<div class="prompt r" style="--i:4"><span class="p">&gt;</span> Use Maximum Breadth and Depth, and at the end steelman that you did in fact go as wide and deep as you could on this Mission/Job/Task.<br><br><span class="p">&gt;</span> Go Broader and Deeper. <span style="color:var(--dim)">(x3)</span><br><br><span class="p">&gt;</span> Do you think there is any meat left on this bone? <span class="caret"></span></div></section>
+
+<section class="slide"><div class="kick r">Synergy &amp; Skills</div>
+<h2 class="split">AI struggles to prioritize the <em>most relevant memories.</em></h2>
+<p class="sub r" style="--i:6">AI doesn't shed context in real time. Rereading every memory line by line makes even the most simple of tasks economically infeasible.</p>
+<p class="quote r" style="--i:8">The equivalent to BlackRock releasing their algorithms to the public for $200/Month.</p></section>
+
+<section class="slide"><div class="kick r">Why the Labs allow it</div>
+<div class="grid g3">
+<div class="card r" style="--i:1"><div class="n">1</div><h3>Fresh Training Data</h3><p>Almost no one is going to turn off data share.</p></div>
+<div class="card r" style="--i:2"><div class="n">2</div><h3>A Training Ground</h3><p>It is much easier to sell more AI if the people using it know what they are doing.</p></div>
+<div class="card dark r" style="--i:3"><div class="n">3</div><h3>A Result Gap</h3><p>Slow adopters are forced to buy into the Ecosystem or die off.</p></div></div>
+<p class="foot r" style="--i:5">So we need to create our own solutions to ensure Consistent Quality Results.</p></section>
+
+<section class="slide"><div class="kick r">Skills</div>
+<h1 class="split">Think of it like a Factory.</h1>
+<p class="sub r" style="--i:5">The reason every Twix tastes the same no matter what state or store you buy it from is the <b>consistency of their process and ingredients.</b></p>
+<p class="quote r" style="--i:7">Create a "recipe" your bots follow to produce a high quality result every time.</p></section>
+
+<section class="slide"><div class="kick r">Your Skill Garden</div>
+<div class="grid g2" style="max-width:1200px">
+<div class="card r" style="--i:1"><div class="n">Main way</div><h3>Tasteful Intention</h3><p>Your establishment of a Baseline Standard, gradually refined over time.</p></div>
+<div class="card r" style="--i:2"><div class="loot" style="width:70px;margin:0 0 1vh"></div><h3>Spontaneous Loot Drop</h3><p>When your AI does something without your prompt that makes you go "Hoooooollldddd upppp, where did THIS come from??"</p></div></div>
+<p class="foot r" style="--i:4">Create as many skills around that moment as possible.</p></section>
+
+<section class="slide"><div class="ring"></div><div class="ring b"></div><div class="kick r">Clark Kent</div>
+<h2 class="split">Take the suit off, and he's a <em>god.</em></h2>
+<p class="sub r" style="--i:6">That is the capability gap between how AI will operate day to day vs its <b>True Potential.</b> Even a better baseline is a compounding and exponential win.</p></section>
+
+<section class="slide"><div class="kick r">Better to show than to tell</div>
+<h1 class="split">Live Demo</h1>
+<div class="grid g3">
+<div class="card r" style="--i:3"><div class="n">1</div><h3>The Factory</h3><p>Synergy and Skills in action.</p></div>
+<div class="card r" style="--i:4"><div class="n">2</div><h3>The Result</h3><p>jarrettwroten.com</p></div>
+<div class="card r" style="--i:5"><div class="n">3</div><h3>Your Turn</h3><p>Prompt your bot to create a website.</p></div></div></section>
+
+<section class="slide"><div class="ring"></div><div class="ring b"></div>
+<h1 class="split">Questions?</h1>
+<p class="sub r" style="--i:3">Weapons of Mass Creation</p></section>
+
+</main>
+<script>
+// split headings into words
+document.querySelectorAll('.split').forEach(el=>{let i=0;const walk=n=>{[...n.childNodes].forEach(c=>{if(c.nodeType===3){const f=document.createDocumentFragment();c.textContent.split(/(\s+)/).forEach(t=>{if(!t)return;if(/^\s+$/.test(t)){f.appendChild(document.createTextNode(t));return}const s=document.createElement('span');s.className='w';s.style.setProperty('--w',i++);s.textContent=t;f.appendChild(s)});c.replaceWith(f)}else if(c.nodeType===1){walk(c)}})};walk(el)});
+const S=[...document.querySelectorAll('.slide')],P=document.getElementById('prog'),C=document.getElementById('count');let cur=0,mood='gold';
+function go(n){n=Math.max(0,Math.min(S.length-1,n));S[cur].classList.remove('on');void S[n].offsetWidth;cur=n;S[cur].classList.add('on');P.style.width=((cur+1)/S.length*100)+'%';C.textContent=String(cur+1).padStart(2,'0')+' / '+S.length;mood=S[cur].dataset.mood||'gold';history.replaceState(null,'','#'+(cur+1))}
+addEventListener('keydown',e=>{if(['ArrowRight','ArrowDown','PageDown',' ','Enter'].includes(e.key)){e.preventDefault();go(cur+1)}else if(['ArrowLeft','ArrowUp','PageUp','Backspace'].includes(e.key)){e.preventDefault();go(cur-1)}else if(e.key==='Home')go(0);else if(e.key==='End')go(S.length-1);else if(e.key==='f'||e.key==='F'){document.fullscreenElement?document.exitFullscreen():document.documentElement.requestFullscreen()}document.getElementById('hint').style.opacity=0});
+addEventListener('click',e=>{go(e.clientX>innerWidth/3?cur+1:cur-1);document.getElementById('hint').style.opacity=0});
+let tx=0;addEventListener('touchstart',e=>tx=e.touches[0].clientX,{passive:true});addEventListener('touchend',e=>{const d=e.changedTouches[0].clientX-tx;if(Math.abs(d)>40)go(d<0?cur+1:cur-1)});
+go((parseInt(location.hash.slice(1))||1)-1);
+// ember field
+const cv=document.getElementById('fx'),x=cv.getContext('2d');let W,H,D=[];function rs(){W=cv.width=innerWidth*devicePixelRatio;H=cv.height=innerHeight*devicePixelRatio}rs();addEventListener('resize',rs);
+for(let i=0;i<140;i++)D.push({x:Math.random(),y:Math.random(),r:Math.random()*2.2+.4,v:Math.random()*.0012+.0003,s:Math.random()*Math.PI*2,a:Math.random()*.7+.2});
+let t=0;(function f(){t+=.01;x.clearRect(0,0,W,H);const g=x.createRadialGradient(W*.5,H*1.1,0,W*.5,H*1.1,H*1.1);g.addColorStop(0,mood==='blood'?'rgba(140,25,10,.45)':'rgba(120,70,10,.38)');g.addColorStop(1,'rgba(0,0,0,0)');x.fillStyle=g;x.fillRect(0,0,W,H);
+for(const p of D){p.y-=p.v;if(p.y<-.02){p.y=1.02;p.x=Math.random()}const px=(p.x+Math.sin(t+p.s)*.012)*W,py=p.y*H,fl=.6+.4*Math.sin(t*3+p.s);x.beginPath();x.arc(px,py,p.r*devicePixelRatio,0,7);x.fillStyle=mood==='blood'?`rgba(255,${80+p.r*30|0},40,${p.a*fl})`:`rgba(255,${170+p.r*25|0},70,${p.a*fl})`;x.shadowBlur=12*devicePixelRatio;x.shadowColor=mood==='blood'?'#ff3b1a':'#ffb347';x.fill()}x.shadowBlur=0;requestAnimationFrame(f)})();
+</script>
+</body></html>
